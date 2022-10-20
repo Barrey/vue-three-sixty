@@ -4,103 +4,26 @@
         <div class="vue-three-sixty__viewport" ref="viewport">
             <p class="vue-three-sixty__loading" ref="viewPercentage" v-if="!imagesLoaded"></p>
             <canvas 
-                class="vue-three-sixty__image" 
+                class="vue-three-sixty__image" id="product-image"
                 ref="imageContainer"
                 v-hammer:pinch="onPinch"
                 v-hammer:pinchend="onPinch"
                 v-hammer:pinchout="onPinchOut"
                 v-hammer:pinchin="onPinchIn"
             ></canvas>
+            
         </div>
-        <div class="vue-three-sixty__buttons" v-if="imagesLoaded">
-            <div class="vue-three-sixty__btn vue-three-sixty__btn--play" @click="togglePlay" v-if="!playing">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <polygon :fill="btnColor" points="11.061,8 11.061,20 20.061,14"/>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn vue-three-sixty__btn--pause" @click="togglePlay" v-else>
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <rect x="10.261" y="8.142" :fill="btnColor" width="2.5" height="12"/>
-                        <rect x="15.26" y="8.142" :fill="btnColor" width="2.5" height="12"/>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn vue-three-sixty__btn--zoom-in" @click="zoomIn" v-if="!disableZoom">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <rect x="8.1" y="13" :fill="btnColor" width="12" height="2.5"/>
-                        <rect x="13" y="8.1" :fill="btnColor" width="2.5" height="12"/>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn  vue-three-sixty__btn--zoom-out" @click="zoomOut" v-if="!disableZoom">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <rect x="8.1" y="13" :fill="btnColor" width="12" height="2.5"/>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn  vue-three-sixty__btn--left" @click="prev">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <g transform="rotate(-45)">
-                            <rect x="-4" y="16" :fill="btnColor" width="12" height="2.5"/>
-                            <rect x="-4" y="16" :fill="btnColor" width="2.5" height="12"/>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn  vue-three-sixty__btn--right" @click="next">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <g transform="rotate(-45)">
-                            <rect x="-8" y="22" :fill="btnColor" width="12" height="2.5"/>
-                            <rect x="2" y="12" :fill="btnColor" width="2.5" height="12"/>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-            <div class="vue-three-sixty__btn  vue-three-sixty__btn--reset" @click="resetPosition">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <path :fill="btnColor" d="M15.845,9.99h-3.936V7.944L7.2,11.274l4.709,3.331v-2.046h3.936c1.314,0,2.385,1.07,2.385,2.386v0.156
-		c0,1.315-1.07,2.386-2.385,2.386H9.555v2.569h6.291c2.732,0,4.954-2.224,4.954-4.955v-0.156C20.799,12.212,18.578,9.99,15.845,9.99
-		z"/>
-                    </g>
-                </svg>
-            </div>
-            <div v-if="isFullScreen" class="vue-three-sixty__btn  vue-three-sixty__btn--close" @click="toggleFullScreen">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <g transform="rotate(45)">
-                            <rect x="11" y="-1" :fill="btnColor" width="18" height="2.5"/>
-                            <rect x="18.5" y="-8.5" :fill="btnColor" width="2.5" height="18"/>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-            <div v-else class="vue-three-sixty__btn  vue-three-sixty__btn--expand" @click="toggleFullScreen">
-                <svg :width="`${btnSize}px`" :height="`${btnSize}px`" :viewBox="`0 0 ${btnSize} ${btnSize}`">
-                    <g :transform="`scale(${btnScale} ${btnScale})`">
-                        <rect x="0" y="0" :fill="btnBgColor" width="28" height="28" :rx="btnRounded" />
-                        <polygon :fill="btnColor" points="18.599,11.096 18.835,11.332 18.835,11.332 20,12.497 20,8 15.503,8 16.902,9.398 13.998,12.303 
-	11.096,9.401 11.24,9.257 12.498,8 8,8 8,12.497 9.219,11.277 9.399,11.097 12.301,14 9.398,16.903 9.311,16.816 9.311,16.816 
-	8,15.504 8,20 12.497,20 11.331,18.835 11.095,18.599 13.998,15.697 16.902,18.601 15.503,20 20,20 20,15.504 18.744,16.76 
-	18.599,16.905 15.695,14 "/>
-                    </g>
-                </svg>
-            </div>
+        <div id="vue-three-sixty-detail">
+            <a id="button-zoom" v-if="imagesLoaded" @click="toggleFullScreen">
+                <img v-if="!isFullScreen" style="width: 32px;" src="./assets/zoom-btn.png" />
+                <img v-if="isFullScreen" style="width: 32px;" src="./assets/zoomo-btn.png" />
+            </a>
+            <a id="button-play" v-if="imagesLoaded" @click="togglePlay">
+                <img style="width: 32px;" src="./assets/360-btn.png" />
+            </a>
+            <a id="button-zoom-in" v-if="isFullScreen" @click="zoomFullScreen">
+                <img style="width: 32px;" src="./assets/fullscreen-btn.png" />
+            </a>
         </div>
     </div>
 </template>
@@ -248,7 +171,6 @@ export default {
                 this.$refs.viewer.classList.remove('vue-three-sixty--fullscreen')
             } else {
                 this.$refs.viewer.classList.add('vue-three-sixty--fullscreen')
-                
             }
             this.setImage()
         },
@@ -298,7 +220,6 @@ export default {
                 fromIndex = 0;
                 toIndex = this.amount - 1;
             }
-            console.log(toIndex)
             for(let i=fromIndex; i <= toIndex; i++) {
                 const imageIndex = (this.paddingIndex) ? this.lpad(i, "0", 2) : i
                 const fileName = this.fileName.replace('{index}', imageIndex);
@@ -466,7 +387,7 @@ export default {
             this.$refs.viewport.addEventListener('mousedown', this.startMoving);
             this.$refs.viewport.addEventListener('mousemove', this.doMoving);
 
-            this.$refs.viewport.addEventListener('wheel', this.onScroll);
+            // this.$refs.viewport.addEventListener('wheel', this.onScroll);
         },
         zoomIn(evt) {
             if (this.disableZoom) return;
@@ -479,8 +400,18 @@ export default {
             if (this.disableZoom) return;
             
             this.lastX = this.centerX;
-            this.lastY = this.centerY
+            this.lastY = this.centerY   
             this.zoom(-1)
+        },
+        zoomFullScreen() {
+            const elementFullscreen = document.getElementById('product-image');
+            if (elementFullscreen.requestFullscreen) {
+                elementFullscreen.requestFullscreen();
+            } else if (elementFullscreen.webkitRequestFullscreen) { /* Safari */
+                elementFullscreen.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elementFullscreen.msRequestFullscreen();
+            }
         },
         moveLeft() {
             this.currentLeftPosition += this.customOffset;
@@ -507,6 +438,9 @@ export default {
                 this.currentCanvasImage.src = this.currentImage
 
                 this.currentCanvasImage.onload = () => {
+                    if (!this.$refs.viewport){
+                        return;
+                    }
                     let viewportElement = this.$refs.viewport.getBoundingClientRect()
                     this.canvas.width  = (this.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
                     this.canvas.height = (this.isFullScreen) ? viewportElement.height : this.currentCanvasImage.height
@@ -519,6 +453,9 @@ export default {
                     console.log('cannot load this image')
                 }
             } else {
+                if (!this.$refs.viewport){
+                        return;
+                    }
                 this.currentCanvasImage = this.images[0]
                 let viewportElement = this.$refs.viewport.getBoundingClientRect()
                 this.canvas.width  = (this.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
@@ -545,17 +482,17 @@ export default {
 
                 this.centerX = this.currentCanvasImage.width*ratio/2
                 this.centerY = this.currentCanvasImage.height*ratio/2
-                
+
                 //center image
                 this.ctx.drawImage(this.currentCanvasImage, this.currentLeftPosition, this.currentTopPosition, this.currentCanvasImage.width, this.currentCanvasImage.height,
                             centerShift_x,centerShift_y,this.currentCanvasImage.width*ratio, this.currentCanvasImage.height*ratio);  
 
                 this.addHotspots()
 
-            }
-            catch(e) {
+                }
+                catch(e) {
                 this.trackTransforms(this.ctx)
-            }
+                }
 
         },
         onMove(pageX) {
@@ -599,7 +536,8 @@ export default {
         },
         onScroll(evt) {
             evt.preventDefault(); 
-
+            this.toggleFullScreen();
+            return;
             if (this.disableZoom || this.scrollImage) {
                 if (evt.deltaY < 0) {
                     this.moveActiveIndexDown(1);
@@ -791,9 +729,42 @@ export default {
 </script>
 
 <style scoped>
+    #vue-three-sixty-detail {
+        position: absolute;
+        top: 0;
+        right: 1em;
+        background: white;
+        width: 52px;
+        height: 160px;
+    }
+    #vue-three-sixty-detail a {
+        position: absolute;
+        cursor: pointer;
+        padding: 10px;
+        border: none;
+        z-index: 2;
+        background: transparent;
+        fill: #d9d9d9;
+        transition: background .2s,
+        fill .2s;
+    }
+    #button-zoom {
+        top: 0;
+    }
+    #button-zoom-in {
+        top: 104px;
+    }
+    #button-zoom:hover, #button-play:hover, #button-zoom-in:hover {
+        background: #f2f2f2;
+        fill: rgba(0, 0, 0, 0.25);
+    }
+    #button-play {
+        top: 56px;
+    }
     .vue-three-sixty {
         position: relative;
         background-color: white;
+        transition: width 0.5s linear;
     }
 
     .vue-three-sixty.vue-three-sixty--fullscreen {
@@ -811,10 +782,13 @@ export default {
         align-items: stretch;
         align-content: stretch;
         cursor: default;
+        background-color: rgba(0, 0, 0, 0.9);
+        transition: background 0.1s linear;
     }
 
     .vue-three-sixty__viewport {
-        width: 100%;
+        width: 90%;
+        height: 90%;
         /* height: 100%; */
         overflow: hidden;
         left: 0;
@@ -822,6 +796,12 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        top: 1em;
+        position: relative;
+    }
+    .sixty__viewport canvas {
+        transition: 7s;
+        transform: rotate(360deg);
     }
 
     .vue-three-sixty .vue-three-sixty__buttons {
@@ -882,5 +862,13 @@ export default {
         background-position: center;
         background-size: contain;
         position: relative;
+    }
+
+    .vue-three-sixty__zoom-button {
+        background: grey;
+    }
+
+    .vue-three-sixty__360-button {
+        background: grey;
     }
 </style>
