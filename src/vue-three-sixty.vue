@@ -171,10 +171,41 @@ export default {
                 this.$refs.viewer.classList.remove('vue-three-sixty--fullscreen')
                 this.$refs.viewport.removeEventListener('click', this.toggleFullScreen, true)
                 document.removeEventListener('keydown', this.handleKeyboard, true);
+
+                //move dom to original place
+                console.log("removed")
+                const imgFullScreen = document.querySelector('div#fullscreen-360');
+                imgFullScreen.style.width = null;
+                imgFullScreen.style.position = null;
+                imgFullScreen.style.top = null;
+                imgFullScreen.style.height = null;
+                imgFullScreen.zIndex = null;
+                imgFullScreen.style.left = null;
+                document.querySelector('#app div').appendChild(document.querySelector('div#fullscreen-360 div'));
+                
+                //remove dom 
+                document.querySelector('div#fullscreen-360').remove();
             } else {
                 this.$refs.viewer.classList.add('vue-three-sixty--fullscreen')
+                const firstScript = document.getElementsByTagName('script')[0];
                 this.$refs.viewport.addEventListener('click', this.toggleFullScreen, true)
                 document.addEventListener('keydown', this.handleKeyboard);
+                
+                if (this.$refs.viewer){
+                    const imgFullScreen = document.createElement('div');
+                    imgFullScreen.setAttribute("id", "fullscreen-360");
+                    imgFullScreen.style.width = "100%";
+                    imgFullScreen.style.position = "fixed";
+                    imgFullScreen.style.top = "0px";
+                    imgFullScreen.style.height = "100%";
+                    imgFullScreen.style.zIndex = "2000000001";
+                    imgFullScreen.style.left = "0px";
+
+                    //inject div in bottom of body to makesure fullscreen is always on top
+                    document.body.insertAdjacentElement('beforeend', imgFullScreen)
+                    document.querySelector('div#fullscreen-360').appendChild(this.$refs.viewer)
+                }
+                
             }
             this.setImage()
         },
@@ -732,7 +763,10 @@ export default {
         },
         handleKeyboard(e){
             if (this.readKeyboard(e) == "Escape"){
-                this.togglePlay();
+                //stop playing while user press Escape in fullscreen mode
+                if (this.playing){
+                    this.stop();
+                }
                 this.toggleFullScreen();
             }
         }
@@ -744,7 +778,7 @@ export default {
     #vue-three-sixty-detail {
         position: absolute;
         top: 0;
-        right: 1em;
+        right: 0;
         background: white;
         width: 52px;
         height: 160px;
@@ -772,7 +806,7 @@ export default {
     }
     #button-play {
         top: 54px;
-        height: 50px;
+        height: 40px;
     }
     .vue-three-sixty {
         position: relative;
@@ -782,7 +816,7 @@ export default {
 
     .vue-three-sixty.vue-three-sixty--fullscreen {
         position: fixed;
-        z-index: 9999;
+        z-index: 999999;
         top: 0;
         right: 0;
         bottom: 0;
@@ -800,16 +834,16 @@ export default {
     }
 
     .vue-three-sixty__viewport {
-        width: 90%;
-        height: 90%;
+        width: 100%;
+        height: 100%;
         /* height: 100%; */
         overflow: hidden;
         left: 0;
+        top: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        top: 1em;
         position: relative;
     }
     .sixty__viewport canvas {
