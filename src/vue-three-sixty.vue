@@ -19,10 +19,10 @@
                 <img v-if="isFullScreen" style="width: 32px;" src="./assets/zoomo-btn.png" />
             </a>
             <a id="button-play" v-if="imagesLoaded" @click="togglePlay">
-                <img style="width: 32px;" src="./assets/360-btn.png" />
+                <img style="width: 32px; padding-top: 9px;" src="./assets/360-btn.png" />
             </a>
             <a id="button-zoom-in" v-if="isFullScreen" @click="zoomFullScreen">
-                <img style="width: 32px;" src="./assets/fullscreen-btn.png" />
+                <img style="width: 32px; padding-top: 1px;" src="./assets/fullscreen-btn.png" />
             </a>
         </div>
     </div>
@@ -82,7 +82,7 @@ export default {
         disableZoom: {
             type: Boolean,
             require: false,
-            default: false
+            default: true
         },
         scrollImage: {
             type: Boolean,
@@ -169,8 +169,10 @@ export default {
         isFullScreen(value) {
             if (!value) {
                 this.$refs.viewer.classList.remove('vue-three-sixty--fullscreen')
+                this.$refs.viewport.removeEventListener('click', this.toggleFullScreen, true)
             } else {
                 this.$refs.viewer.classList.add('vue-three-sixty--fullscreen')
+                this.$refs.viewport.addEventListener('click', this.toggleFullScreen, true)
             }
             this.setImage()
         },
@@ -387,7 +389,7 @@ export default {
             this.$refs.viewport.addEventListener('mousedown', this.startMoving);
             this.$refs.viewport.addEventListener('mousemove', this.doMoving);
 
-            // this.$refs.viewport.addEventListener('wheel', this.onScroll);
+            this.$refs.viewport.addEventListener('wheel', this.onScroll);
         },
         zoomIn(evt) {
             if (this.disableZoom) return;
@@ -536,8 +538,6 @@ export default {
         },
         onScroll(evt) {
             evt.preventDefault(); 
-            this.toggleFullScreen();
-            return;
             if (this.disableZoom || this.scrollImage) {
                 if (evt.deltaY < 0) {
                     this.moveActiveIndexDown(1);
@@ -743,7 +743,7 @@ export default {
         padding: 10px;
         border: none;
         z-index: 2;
-        background: transparent;
+        background: white;
         fill: #d9d9d9;
         transition: background .2s,
         fill .2s;
@@ -759,7 +759,8 @@ export default {
         fill: rgba(0, 0, 0, 0.25);
     }
     #button-play {
-        top: 56px;
+        top: 54px;
+        height: 50px;
     }
     .vue-three-sixty {
         position: relative;
