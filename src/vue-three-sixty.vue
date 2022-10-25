@@ -170,9 +170,11 @@ export default {
             if (!value) {
                 this.$refs.viewer.classList.remove('vue-three-sixty--fullscreen')
                 this.$refs.viewport.removeEventListener('click', this.toggleFullScreen, true)
+                document.removeEventListener('keydown', this.handleKeyboard, true);
             } else {
                 this.$refs.viewer.classList.add('vue-three-sixty--fullscreen')
                 this.$refs.viewport.addEventListener('click', this.toggleFullScreen, true)
+                document.addEventListener('keydown', this.handleKeyboard);
             }
             this.setImage()
         },
@@ -724,6 +726,16 @@ export default {
         toggleFullScreen() {
             this.isFullScreen = !this.isFullScreen
         },
+        readKeyboard(e){
+            e.preventDefault;
+            return e.key
+        },
+        handleKeyboard(e){
+            if (this.readKeyboard(e) == "Escape"){
+                this.togglePlay();
+                this.toggleFullScreen();
+            }
+        }
     }
 }
 </script>
