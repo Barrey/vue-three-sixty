@@ -19,7 +19,7 @@
                 <img v-if="isFullScreen" style="width: 32px;" src="./assets/zoomo-btn.png" />
             </a>
             <a id="button-play" v-if="imagesLoaded" @click="togglePlay">
-                <img style="width: 32px; padding-top: 9px;" src="./assets/360-btn.png" />
+                <img style="width: 32px; padding-top: 9px; position: relative;" src="./assets/360-btn.png" />
             </a>
             <a id="button-zoom-in" v-if="isFullScreen" @click="zoomFullScreen">
                 <img style="width: 32px; padding-top: 1px;" src="./assets/fullscreen-btn.png" />
@@ -117,6 +117,11 @@ export default {
             require: false,
             default: false
         },
+        idElement: {
+            type: String,
+            require: true,
+            default: '#vue-360'
+        }
     },
     data() {
         return {
@@ -181,7 +186,8 @@ export default {
                 imgFullScreen.style.height = null;
                 imgFullScreen.zIndex = null;
                 imgFullScreen.style.left = null;
-                document.querySelector('#app div').appendChild(document.querySelector('div#fullscreen-360 div'));
+                console.log(`move to #${this.idElement}`)
+                document.querySelector(`#${this.idElement} div`).appendChild(document.querySelector('div#fullscreen-360 div'));
                 
                 //remove dom 
                 document.querySelector('div#fullscreen-360').remove();
@@ -784,7 +790,9 @@ export default {
         height: 160px;
     }
     #vue-three-sixty-detail a {
-        position: absolute;
+        height: 35px;
+        display: block;
+        position: relative;
         cursor: pointer;
         padding: 10px;
         border: none;
@@ -797,15 +805,11 @@ export default {
     #button-zoom {
         top: 0;
     }
-    #button-zoom-in {
-        top: 104px;
-    }
     #button-zoom:hover, #button-play:hover, #button-zoom-in:hover {
         background: #f2f2f2;
         fill: rgba(0, 0, 0, 0.25);
     }
     #button-play {
-        top: 54px;
         height: 40px;
     }
     .vue-three-sixty {
