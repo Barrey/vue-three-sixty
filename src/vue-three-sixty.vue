@@ -194,7 +194,6 @@ export default {
             } else {
                 this.$refs.viewer.classList.add('vue-three-sixty--fullscreen')
                 const firstScript = document.getElementsByTagName('script')[0];
-                this.$refs.viewport.addEventListener('click', this.toggleFullScreen, true)
                 document.addEventListener('keydown', this.handleKeyboard);
                 
                 if (this.$refs.viewer){
@@ -790,7 +789,8 @@ export default {
         height: 160px;
     }
     #vue-three-sixty-detail a {
-        height: 35px;
+        max-height: 50px;
+        height: 50px;
         display: block;
         position: relative;
         cursor: pointer;
