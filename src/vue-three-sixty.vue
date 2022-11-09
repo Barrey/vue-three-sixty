@@ -82,7 +82,7 @@ export default {
         disableZoom: {
             type: Boolean,
             require: false,
-            default: true
+            default: false
         },
         scrollImage: {
             type: Boolean,
