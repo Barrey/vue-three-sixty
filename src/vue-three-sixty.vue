@@ -178,7 +178,6 @@ export default {
                 document.removeEventListener('keydown', this.handleKeyboard, true);
 
                 //move dom to original place
-                console.log("removed")
                 const imgFullScreen = document.querySelector('div#fullscreen-360');
                 imgFullScreen.style.width = null;
                 imgFullScreen.style.position = null;
@@ -186,7 +185,6 @@ export default {
                 imgFullScreen.style.height = null;
                 imgFullScreen.zIndex = null;
                 imgFullScreen.style.left = null;
-                console.log(`move to #${this.idElement}`)
                 document.querySelector(`#${this.idElement} div`).appendChild(document.querySelector('div#fullscreen-360 div'));
                 
                 //remove dom 
@@ -576,7 +574,7 @@ export default {
         },
         onScroll(evt) {
             evt.preventDefault(); 
-            if (this.disableZoom || this.scrollImage) {
+            if (this.disableZoom || this.scrollImage || !this.isFullScreen) {
                 if (evt.deltaY < 0) {
                     this.moveActiveIndexDown(1);
                 } else {
